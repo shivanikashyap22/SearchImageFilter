@@ -237,6 +237,7 @@ const CanvasPage = () => {
   return (
     <>
     <Styled.CanvasWrapper>
+        
       <canvas ref={canvasRef} width={800} height={600} />
       <Styled.ButtonWrapper>
         <Styled.ActionButton onClick={() => shapeImage('circle')}>Shape as Circle</Styled.ActionButton>
