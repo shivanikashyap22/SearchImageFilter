@@ -33,7 +33,11 @@ export const CanvasWrapper = styled.div`
 
    
   }
-  
+  .download{
+    position:absolute;
+    top:50%;
+    margin-left:30px;
+  }
 
   .wrapper {
    
@@ -55,7 +59,8 @@ export const CanvasWrapper = styled.div`
 `;
 
 export const ButtonWrapper = styled.div`
-
+position:absolute;
+top:5%;
 
 `;
 

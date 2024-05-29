@@ -21,7 +21,7 @@ const CanvasPage = () => {
     img.src = imageUrl;
     img.onload = () => {
       const fabricImg = new fabric.Image(img);
-  const container = canvasRef.current?.parentNode; // Update to use canvasRef
+  const container = canvasRef.current?.parentNode; 
 
   if (!container) {
     console.error("Canvas container is not found.");
@@ -30,7 +30,7 @@ const CanvasPage = () => {
 
   const canvasWidth = container.clientWidth;
   const canvasHeight = container.clientHeight;
-  const canvas = canvasRef.current?.fabric; // Access canvas instance from ref
+  const canvas = canvasRef.current?.fabric; 
 
   if (!canvas) {
     console.error("Fabric canvas instance is not properly created.");
@@ -225,7 +225,7 @@ const CanvasPage = () => {
      
       <Styled.CanvasWrapper>
         <div className='canvas'>
-          <canvas ref={canvasRef} />
+        <canvas ref={canvasRef} width={800} height={500}/>
         </div>
         <div className='wrapper'>
           <Styled.ButtonWrapper>
