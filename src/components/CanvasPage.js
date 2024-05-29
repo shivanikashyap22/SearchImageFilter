@@ -10,7 +10,7 @@ const CanvasPage = () => {
   const imageUrl = params.get('imageUrl');
 
   useEffect(() => {
-    if (!canvasRef.current) return;
+    if (!canvasRef.current || !imageUrl) return;
 
     const canvasElement = canvasRef.current;
     const canvas = new fabric.Canvas(canvasElement);
@@ -21,25 +21,20 @@ const CanvasPage = () => {
     img.src = imageUrl;
     img.onload = () => {
       const fabricImg = new fabric.Image(img);
-  const container = canvasRef.current?.parentNode; 
+      const container = canvasElement.parentNode;
 
-  if (!container) {
-    console.error("Canvas container is not found.");
-    return;
-  }
+      if (!container) {
+        console.error("Container not found.");
+        return;
+      }
 
-  const canvasWidth = container.clientWidth;
-  const canvasHeight = container.clientHeight;
-  const canvas = canvasRef.current?.fabric; 
+      const canvasWidth = container.clientWidth;
+      const canvasHeight = container.clientHeight;
 
-  if (!canvas) {
-    console.error("Fabric canvas instance is not properly created.");
-    return;
-  }
-      canvas?.setWidth(canvasWidth);
-      canvas?.setHeight(canvasHeight);
+      canvas.setWidth(canvasWidth);
+      canvas.setHeight(canvasHeight);
 
-      const scaleFactor = Math.min(canvasWidth / fabricImg?.width, canvasHeight / fabricImg?.height);
+      const scaleFactor = Math.min(canvasWidth / fabricImg.width, canvasHeight / fabricImg.height);
       fabricImg.scale(scaleFactor);
 
       fabricImg.set({
@@ -50,6 +45,7 @@ const CanvasPage = () => {
       canvas.add(fabricImg);
       canvas.sendToBack(fabricImg);
       canvas.renderAll();
+      logCanvasLayers(canvas);
     };
 
     return () => {
@@ -70,6 +66,7 @@ const CanvasPage = () => {
       });
       canvas.add(text).setActiveObject(text);
       canvas.renderAll();
+      logCanvasLayers(canvas);
     }
   };
 
@@ -129,6 +126,7 @@ const CanvasPage = () => {
       if (shape) {
         canvas.add(shape).setActiveObject(shape);
         canvas.renderAll();
+        logCanvasLayers(canvas);
       }
     }
   };
@@ -138,52 +136,56 @@ const CanvasPage = () => {
     if (canvas) {
       const imgObj = canvas.getObjects('image')[0];
       if (imgObj) {
-        let clipPath;
         switch (shapeType) {
           case 'circle':
-            clipPath = new fabric.Circle({
-              radius: Math.min(imgObj?.width, imgObj.height) / 2,
-              originX: 'center',
-              originY: 'center'
+            imgObj.set({
+              clipPath: new fabric.Circle({
+                radius: Math.min(imgObj.width, imgObj.height) / 2,
+                originX: 'center',
+                originY: 'center'
+              })
             });
             break;
           case 'rectangle':
-            clipPath = new fabric.Rect({
-              width: imgObj?.width,
-              height: imgObj.height,
-              originX: 'center',
-              originY: 'center'
+            imgObj.set({
+              clipPath: new fabric.Rect({
+                width: imgObj.width,
+                height: imgObj.height,
+                originX: 'center',
+                originY: 'center'
+              })
             });
             break;
           case 'triangle':
-            clipPath = new fabric.Triangle({
-              width: imgObj?.width,
-              height: imgObj.height,
-              originX: 'center',
-              originY: 'center'
+            imgObj.set({
+              clipPath: new fabric.Triangle({
+                width: imgObj.width,
+                height: imgObj.height,
+                originX: 'center',
+                originY: 'center'
+              })
             });
             break;
           case 'polygon':
-            clipPath = new fabric.Polygon(
-              [
-                { x: 0, y: 0 },
-                { x: imgObj?.width / 2, y: 0 },
-                { x: imgObj?.width / 2, y: imgObj.height / 2 },
-                { x: 0, y: imgObj.height / 2 },
-              ],
-              {
-                originX: 'center',
-                originY: 'center'
-              }
-            );
+            imgObj.set({
+              clipPath: new fabric.Polygon(
+                [
+                  { x: 0, y: 0 },
+                  { x: imgObj.width / 2, y: 0 },
+                  { x: imgObj.width / 2, y: imgObj.height / 2 },
+                  { x: 0, y: imgObj.height / 2 },
+                ],
+                {
+                  originX: 'center',
+                  originY: 'center'
+                }
+              )
+            });
             break;
           default:
-            break;
+            imgObj.set({ clipPath: null });
         }
-        if (clipPath) {
-          imgObj.set({ clipPath });
-          canvas.renderAll();
-        }
+        canvas.renderAll();
       }
     }
   };
@@ -199,6 +201,7 @@ const CanvasPage = () => {
       });
       canvas.add(text).setActiveObject(text);
       canvas.renderAll();
+      logCanvasLayers(canvas);
     }
   };
 
@@ -216,6 +219,16 @@ const CanvasPage = () => {
     }
   };
 
+  const logCanvasLayers = (canvas) => {
+    const layers = canvas.getObjects().map((obj) => {
+      if (obj.type === 'image') return 'Image';
+      if (obj.type === 'textbox') return 'Text';
+      if (obj.type === 'circle' || obj.type === 'triangle' || obj.type === 'rect' || obj.type === 'polygon') return 'Shape';
+      return obj.type;
+    });
+    console.log(layers);
+  };
+
   return (
     <>
     <Styled.Heading>
@@ -224,8 +237,8 @@ const CanvasPage = () => {
     <Styled.Container className="container">
      
       <Styled.CanvasWrapper>
-        <div className='canvas'>
-        <canvas ref={canvasRef} width={800} height={500}/>
+        <div className='canvass'>
+          <canvas ref={canvasRef} width={800} height={500}/>
         </div>
         <div className='wrapper'>
           <Styled.ButtonWrapper>
