@@ -6,6 +6,7 @@ export const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  
  
 `;
 
@@ -20,8 +21,7 @@ export const Heading=styled.div`
 
 export const CanvasWrapper = styled.div`
     border:0.5px solid black;
-    padding:50px 0px;
-  
+  position:relative;
   display: flex;
   width: 100%;
   height: 100%;
@@ -29,18 +29,24 @@ export const CanvasWrapper = styled.div`
   align-items: center;
 
   .canvass {
-    flex: 1 1 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
+   flex:0.5;
+
+   
+  }
+  .download{
+    position:absolute;
+    bottom:5%;
+    margin-left:30px;
   }
 
   .wrapper {
-    flex: 1 1 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+   
+    flex:0.5;
+        border-left: 0.5px solid black;
+    height: 100%;
+    width:100%;
+    text-align:center;
+
   }
 
   @media (max-width: 768px) {
@@ -53,9 +59,9 @@ export const CanvasWrapper = styled.div`
 `;
 
 export const ButtonWrapper = styled.div`
-display: flex;
-    align-items: center;
-    flex-wrap: wrap;
+position:absolute;
+top:5%;
+
 `;
 
 export const ActionButton = styled.button`
@@ -73,4 +79,72 @@ export const ActionButton = styled.button`
   &:hover {
     background: darkgray;
   }
+`;
+
+
+
+export const AppWrapper = styled.div`
+  text-align: center;
+  padding: 20px;
+`;
+
+export const SearchWrapper = styled.div`
+  border: 0.5px solid black;
+  padding: 20px;
+`;
+
+export const TopHeading = styled.h1`
+  margin-bottom: 20px;
+`;
+
+export const InputSearch = styled.input`
+  padding: 10px;
+  font-size: 16px;
+  width: 300px;
+  margin-right: 10px;
+`;
+
+export const SearchButton = styled.button`
+  padding: 10px 20px;
+  cursor: pointer;
+  border: none;
+  background: black;
+  color: white;
+  font-weight: 500;
+  font-size: 15px;
+`;
+
+export const ThumbnailWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 30px;
+`;
+
+export const Thumbnail = styled.div`
+  margin: 10px;
+  width: 18rem;
+`;
+
+export const ThumbnailImage = styled.img`
+  width: 260px;
+  height: 280px;
+`;
+
+export const AddCaptionButton = styled.button`
+  margin-top: 15px;
+  border: none;
+  background: black;
+  color: white;
+  font-weight: 500;
+  font-size: 15px;
+  padding: 10px 20px;
+  transition: 0.3s color ease-out;
+  cursor: pointer;
+  border-radius: 8px;
+`;
+
+export const Bio = styled.div`
+  font-size: 18px;
+  text-align: start;
 `;
