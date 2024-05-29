@@ -21,7 +21,7 @@ const CanvasPage = () => {
     img.src = imageUrl;
     img.onload = () => {
       const fabricImg = new fabric.Image(img);
-  const container = canvasRef.current?.parentNode;
+  const container = canvasRef.current?.parentNode; // Update to use canvasRef
 
   if (!container) {
     console.error("Canvas container is not found.");
@@ -30,7 +30,7 @@ const CanvasPage = () => {
 
   const canvasWidth = container.clientWidth;
   const canvasHeight = container.clientHeight;
-  const canvas = canvasRef.current?.fabric; 
+  const canvas = canvasRef.current?.fabric; // Access canvas instance from ref
 
   if (!canvas) {
     console.error("Fabric canvas instance is not properly created.");
@@ -73,6 +73,65 @@ const CanvasPage = () => {
     }
   };
 
+  const addShape = (shapeType) => {
+    const canvas = canvasRef.current?.fabric;
+    if (canvas) {
+      let shape;
+      switch (shapeType) {
+        case 'circle':
+          shape = new fabric.Circle({
+            radius: 50,
+            fill: 'transparent',
+            stroke: 'black',
+            left: 100,
+            top: 100,
+          });
+          break;
+        case 'triangle':
+          shape = new fabric.Triangle({
+            width: 100,
+            height: 100,
+            fill: 'transparent',
+            stroke: 'black',
+            left: 150,
+            top: 150,
+          });
+          break;
+        case 'rectangle':
+          shape = new fabric.Rect({
+            width: 100,
+            height: 50,
+            fill: 'transparent',
+            stroke: 'black',
+            left: 200,
+            top: 200,
+          });
+          break;
+        case 'polygon':
+          shape = new fabric.Polygon(
+            [
+              { x: 0, y: 0 },
+              { x: 50, y: 0 },
+              { x: 50, y: 50 },
+              { x: 0, y: 50 },
+            ],
+            {
+              fill: 'transparent',
+              stroke: 'black',
+              left: 200,
+              top: 200,
+            }
+          );
+          break;
+        default:
+          break;
+      }
+      if (shape) {
+        canvas.add(shape).setActiveObject(shape);
+        canvas.renderAll();
+      }
+    }
+  };
 
   const shapeImage = (shapeType) => {
     const canvas = canvasRef.current?.fabric;
@@ -157,8 +216,6 @@ const CanvasPage = () => {
     }
   };
 
-
-
   return (
     <>
     <Styled.Heading>
@@ -176,13 +233,12 @@ const CanvasPage = () => {
             <Styled.ActionButton onClick={() => shapeImage('rectangle')}>Shape as Rectangle</Styled.ActionButton>
             <Styled.ActionButton onClick={() => shapeImage('triangle')}>Shape as Triangle</Styled.ActionButton>
             <Styled.ActionButton onClick={() => shapeImage('polygon')}>Shape as Polygon</Styled.ActionButton>
-            <Styled.ActionButton onClick={addText}>Add Text</Styled.ActionButton>   
+            <Styled.ActionButton onClick={addText}>Add Text</Styled.ActionButton>
+           
             <Styled.ActionButton onClick={addCaption}>Add Caption</Styled.ActionButton>
-          
+            <Styled.ActionButton onClick={downloadImage}>Download</Styled.ActionButton>
           </Styled.ButtonWrapper>
-          <div className='download'>
-          <Styled.ActionButton onClick={downloadImage}>Download</Styled.ActionButton>
-          </div>
+          
         </div>
       </Styled.CanvasWrapper>
     </Styled.Container>

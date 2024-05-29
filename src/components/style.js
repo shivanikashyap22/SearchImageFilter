@@ -35,8 +35,7 @@ export const CanvasWrapper = styled.div`
   }
   .download{
     position:absolute;
-    bottom:5%;
-    margin-left:30px;
+     margin-left:30px;
   }
 
   .wrapper {
