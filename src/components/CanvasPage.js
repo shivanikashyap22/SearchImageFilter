@@ -234,11 +234,13 @@ const CanvasPage = () => {
             <Styled.ActionButton onClick={() => shapeImage('triangle')}>Shape as Triangle</Styled.ActionButton>
             <Styled.ActionButton onClick={() => shapeImage('polygon')}>Shape as Polygon</Styled.ActionButton>
             <Styled.ActionButton onClick={addText}>Add Text</Styled.ActionButton>
-           
+            <Styled.ActionButton onClick={() => addShape('circle')}>Add Circle</Styled.ActionButton>
+            <Styled.ActionButton onClick={() => addShape('triangle')}>Add Triangle</Styled.ActionButton>
+            <Styled.ActionButton onClick={() => addShape('rectangle')}>Add Rectangle</Styled.ActionButton>
+            <Styled.ActionButton onClick={() => addShape('polygon')}>Add Polygon</Styled.ActionButton>
             <Styled.ActionButton onClick={addCaption}>Add Caption</Styled.ActionButton>
             <Styled.ActionButton onClick={downloadImage}>Download</Styled.ActionButton>
           </Styled.ButtonWrapper>
-          
         </div>
       </Styled.CanvasWrapper>
     </Styled.Container>
