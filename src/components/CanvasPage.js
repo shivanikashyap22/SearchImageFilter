@@ -8,53 +8,62 @@ const CanvasPage = () => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const imageUrl = params.get('imageUrl');
-
   useEffect(() => {
     if (!canvasRef.current || !imageUrl) return;
-
+  
     const canvasElement = canvasRef.current;
     const canvas = new fabric.Canvas(canvasElement);
     canvasElement.fabric = canvas;
-
+  
     const img = new Image();
     img.crossOrigin = "anonymous";
     img.src = imageUrl;
     img.onload = () => {
       const fabricImg = new fabric.Image(img);
       const container = canvasElement.parentNode;
-
+  
       if (!container) {
         console.error("Container not found.");
         return;
       }
-
-      const canvasWidth = container.clientWidth;
-      const canvasHeight = container.clientHeight;
-
-      canvas.setWidth(canvasWidth);
-      canvas.setHeight(canvasHeight);
-
-      const scaleFactor = Math.min(canvasWidth / fabricImg.width, canvasHeight / fabricImg.height);
-      fabricImg.scale(scaleFactor);
-
-      fabricImg.set({
-        left: (canvasWidth - fabricImg.getScaledWidth()) / 2,
-        top: (canvasHeight - fabricImg.getScaledHeight()) / 2,
-      });
-
-      canvas.add(fabricImg);
-      canvas.sendToBack(fabricImg);
-      canvas.renderAll();
-      logCanvasLayers(canvas);
+  
+      const handleCanvasResize = () => {
+        const canvasWidth = container.clientWidth;
+        const canvasHeight = container.clientHeight;
+  
+        if (canvasWidth && canvasHeight) {
+          canvas.setWidth(canvasWidth);
+          canvas.setHeight(canvasHeight);
+  
+          const scaleFactor = Math.min(canvasWidth / fabricImg.width, canvasHeight / fabricImg.height);
+          fabricImg.scale(scaleFactor);
+  
+          fabricImg.set({
+            left: (canvasWidth - fabricImg.getScaledWidth()) / 2,
+            top: (canvasHeight - fabricImg.getScaledHeight()) / 2,
+          });
+  
+          canvas.add(fabricImg);
+          canvas.sendToBack(fabricImg);
+          canvas.renderAll();
+          logCanvasLayers(canvas);
+        } else {
+          console.error("Invalid canvas dimensions.");
+        }
+      };
+  
+      window.addEventListener('resize', handleCanvasResize);
+      handleCanvasResize();
+  
+      return () => {
+        window.removeEventListener('resize', handleCanvasResize);
+        if (canvas) {
+          canvas.dispose();
+        }
+      };
     };
-
-    return () => {
-      if (canvas) {
-        canvas.dispose();
-      }
-    };
+  
   }, [imageUrl]);
-
   const addText = () => {
     const canvas = canvasRef.current?.fabric;
     if (canvas) {
@@ -231,32 +240,30 @@ const CanvasPage = () => {
 
   return (
     <>
-    <Styled.Heading>
-    <h1 className="heading">Add Caption Page</h1>
-    </Styled.Heading>
-    <Styled.Container className="container">
-     
-      <Styled.CanvasWrapper>
-        <div className='canvass'>
-          <canvas ref={canvasRef} width={800} height={500}/>
-        </div>
-        <div className='wrapper'>
-          <Styled.ButtonWrapper>
-            <Styled.ActionButton onClick={() => shapeImage('circle')}>Shape as Circle</Styled.ActionButton>
-            <Styled.ActionButton onClick={() => shapeImage('rectangle')}>Shape as Rectangle</Styled.ActionButton>
-            <Styled.ActionButton onClick={() => shapeImage('triangle')}>Shape as Triangle</Styled.ActionButton>
-            <Styled.ActionButton onClick={() => shapeImage('polygon')}>Shape as Polygon</Styled.ActionButton>
-            <Styled.ActionButton onClick={addText}>Add Text</Styled.ActionButton>
-            <Styled.ActionButton onClick={() => addShape('circle')}>Add Circle</Styled.ActionButton>
-            <Styled.ActionButton onClick={() => addShape('triangle')}>Add Triangle</Styled.ActionButton>
-            <Styled.ActionButton onClick={() => addShape('rectangle')}>Add Rectangle</Styled.ActionButton>
-            <Styled.ActionButton onClick={() => addShape('polygon')}>Add Polygon</Styled.ActionButton>
-            <Styled.ActionButton onClick={addCaption}>Add Caption</Styled.ActionButton>
-            <Styled.ActionButton onClick={downloadImage}>Download</Styled.ActionButton>
-          </Styled.ButtonWrapper>
-        </div>
-      </Styled.CanvasWrapper>
-    </Styled.Container>
+      <Styled.Heading>
+        <h1 className="heading">Add Caption Page</h1>
+      </Styled.Heading>
+      <Styled.Container className="container">
+        <Styled.CanvasWrapper>
+          <div className='canvass'>
+            <canvas ref={canvasRef} width={800} height={500}/>
+          </div>
+          <div className='wrapper'>
+            <Styled.ButtonWrapper>
+              <Styled.ActionButton onClick={() => shapeImage('circle')}>Shape as Circle</Styled.ActionButton>
+              <Styled.ActionButton onClick={() => shapeImage('rectangle')}>Shape as Rectangle</Styled.ActionButton>
+              <Styled.ActionButton onClick={() => shapeImage('triangle')}>Shape as Triangle</Styled.ActionButton>
+              <Styled.ActionButton onClick={() => shapeImage('polygon')}>Shape as Polygon</Styled.ActionButton>
+              <Styled.ActionButton onClick={addText}>Add Text</Styled.ActionButton>
+           
+              <Styled.ActionButton onClick={addCaption}>Add Caption</Styled.ActionButton>
+            </Styled.ButtonWrapper>
+            <div className='download'>
+              <Styled.ActionButton onClick={downloadImage}>Download</Styled.ActionButton>
+            </div>
+          </div>
+        </Styled.CanvasWrapper>
+      </Styled.Container>
     </>
   );
 };
