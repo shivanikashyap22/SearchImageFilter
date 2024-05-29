@@ -1,43 +1,76 @@
 import styled from "styled-components";
-export const ImageWrapper = styled.div`
+
+export const Container = styled.div`
+  width: 100%;
+  height: 100vh;
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
+  align-items: center;
+ 
 `;
 
-export const ImageItem = styled.div`
-  margin: 10px;
-`;
-
-export const Image = styled.img`
-  max-width: 300px;
-  max-height: 300px;
-`;
-
+export const Heading=styled.div`
+   .heading{
+    margin-bottom:20px;
+    display:flex;
+    justify-content:center;
+  }
+ 
+`
 
 export const CanvasWrapper = styled.div`
+    border:0.5px solid black;
+    padding:50px 0px;
+  
   display: flex;
-  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
   align-items: center;
-  padding: 20px;
+
+  .canvass {
+    flex: 1 1 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+
+  .wrapper {
+    flex: 1 1 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+
+    .canvass, .wrapper {
+      flex: 1 1 100%;
+    }
+  }
 `;
 
 export const ButtonWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
-  gap: 10px;
+display: flex;
+    align-items: center;
+    flex-wrap: wrap;
 `;
 
 export const ActionButton = styled.button`
   padding: 10px 20px;
- border: none;
-    background: black;
-    color: white;
-    font-weight: 500;
-    font-size: 15px;
-    padding: 10px 20px;
-    transition: 0.3s color ease-out;
-    cursor:pointer;
-    border-radius:8px;
+  border: none;
+  background: black;
+  color: white;
+  font-weight: 500;
+  font-size: 15px;
+  margin: 5px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: 0.3s background ease;
+
+  &:hover {
+    background: darkgray;
+  }
 `;

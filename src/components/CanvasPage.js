@@ -13,35 +13,29 @@ const CanvasPage = () => {
     if (!canvasRef.current) return;
 
     const canvasElement = canvasRef.current;
-
-    // Create a Fabric.js canvas instance
     const canvas = new fabric.Canvas(canvasElement);
-    // Assign the Fabric.js canvas instance to a property on the canvas element
     canvasElement.fabric = canvas;
 
     const img = new Image();
-    img.crossOrigin = "anonymous"; // This is the key part
+    img.crossOrigin = "anonymous";
     img.src = imageUrl;
     img.onload = () => {
       const fabricImg = new fabric.Image(img);
-      const canvasWidth = window.innerWidth; // Full viewport width
-      const canvasHeight = window.innerHeight; // Full viewport height
+      const container = canvasElement.parentNode;
+      const canvasWidth = container.clientWidth;
+      const canvasHeight = container.clientHeight;
 
-      // Check if the Fabric canvas instance is properly created
       if (!canvasElement.fabric) {
         console.error("Fabric canvas instance is not properly created.");
         return;
       }
 
-      // Set canvas dimensions
       canvas.setWidth(canvasWidth);
       canvas.setHeight(canvasHeight);
 
-      // Calculate the scaling factor to fit the image within the canvas
       const scaleFactor = Math.min(canvasWidth / fabricImg.width, canvasHeight / fabricImg.height);
       fabricImg.scale(scaleFactor);
 
-      // Center the image on the canvas
       fabricImg.set({
         left: (canvasWidth - fabricImg.getScaledWidth()) / 2,
         top: (canvasHeight - fabricImg.getScaledHeight()) / 2,
@@ -120,8 +114,8 @@ const CanvasPage = () => {
             {
               fill: 'transparent',
               stroke: 'black',
-              left: 250,
-              top: 250,
+              left: 200,
+              top: 200,
             }
           );
           break;
@@ -236,27 +230,32 @@ const CanvasPage = () => {
 
   return (
     <>
-    <Styled.CanvasWrapper>
-        
-      <canvas ref={canvasRef} width={800} height={600} />
-      <Styled.ButtonWrapper>
-        <Styled.ActionButton onClick={() => shapeImage('circle')}>Shape as Circle</Styled.ActionButton>
-        <Styled.ActionButton onClick={() => shapeImage('rectangle')}>Shape as Rectangle</Styled.ActionButton>
-        <Styled.ActionButton onClick={() => shapeImage('triangle')}>Shape as Triangle</Styled.ActionButton>
-        <Styled.ActionButton onClick={() => shapeImage('polygon')}>Shape as Polygon</Styled.ActionButton>
-      </Styled.ButtonWrapper>
-      <Styled.ButtonWrapper>
-        <Styled.ActionButton onClick={addText}>Add Text</Styled.ActionButton>
-        <Styled.ActionButton onClick={() => addShape('circle')}>Add Circle</Styled.ActionButton>
-        <Styled.ActionButton onClick={() => addShape('triangle')}>Add Triangle</Styled.ActionButton>
-        <Styled.ActionButton onClick={() => addShape('rectangle')}>Add Rectangle</Styled.ActionButton>
-        <Styled.ActionButton onClick={() => addShape('polygon')}>Add Polygon</Styled.ActionButton>
-        <Styled.ActionButton onClick={addCaption}>Add Caption</Styled.ActionButton>
-      </Styled.ButtonWrapper>
-      <Styled.ButtonWrapper>
-        <Styled.ActionButton onClick={downloadImage}>Download</Styled.ActionButton>
-      </Styled.ButtonWrapper>
-    </Styled.CanvasWrapper>
+    <Styled.Heading>
+    <h1 className="heading">Add Caption Page</h1>
+    </Styled.Heading>
+    <Styled.Container className="container">
+     
+      <Styled.CanvasWrapper>
+        <div className='canvass'>
+          <canvas ref={canvasRef} />
+        </div>
+        <div className='wrapper'>
+          <Styled.ButtonWrapper>
+            <Styled.ActionButton onClick={() => shapeImage('circle')}>Shape as Circle</Styled.ActionButton>
+            <Styled.ActionButton onClick={() => shapeImage('rectangle')}>Shape as Rectangle</Styled.ActionButton>
+            <Styled.ActionButton onClick={() => shapeImage('triangle')}>Shape as Triangle</Styled.ActionButton>
+            <Styled.ActionButton onClick={() => shapeImage('polygon')}>Shape as Polygon</Styled.ActionButton>
+            <Styled.ActionButton onClick={addText}>Add Text</Styled.ActionButton>
+            <Styled.ActionButton onClick={() => addShape('circle')}>Add Circle</Styled.ActionButton>
+            <Styled.ActionButton onClick={() => addShape('triangle')}>Add Triangle</Styled.ActionButton>
+            <Styled.ActionButton onClick={() => addShape('rectangle')}>Add Rectangle</Styled.ActionButton>
+            <Styled.ActionButton onClick={() => addShape('polygon')}>Add Polygon</Styled.ActionButton>
+            <Styled.ActionButton onClick={addCaption}>Add Caption</Styled.ActionButton>
+            <Styled.ActionButton onClick={downloadImage}>Download</Styled.ActionButton>
+          </Styled.ButtonWrapper>
+        </div>
+      </Styled.CanvasWrapper>
+    </Styled.Container>
     </>
   );
 };

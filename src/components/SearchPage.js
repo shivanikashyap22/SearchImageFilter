@@ -5,6 +5,16 @@ import { Link } from "react-router-dom";
 const AppWrapper = styled.div`
   text-align: center;
   padding: 20px;
+  .search{
+    border:0.5px solid black;
+    padding:50px 0px;
+  }
+  .heading{
+    margin-bottom:20px;
+  }
+  .inputSearch{
+    padding-top:20px;
+  }
 `;
 
 const SearchInput = styled.input`
@@ -42,7 +52,7 @@ const Thumbnail = styled.div`
 
 const ThumbnailImage = styled.img`
   width: 260px;
-  height: 346px;
+  height: 280px;
 `;
 
 const AddCaptionButton = styled.button`
@@ -58,6 +68,10 @@ const AddCaptionButton = styled.button`
   border-radius: 8px;
 `;
 
+const Bio=styled.div`
+font-size:18px;
+text-align:start;
+`
 const SearchPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -87,8 +101,14 @@ const SearchPage = () => {
   };
 
   return (
-    <AppWrapper>
-      <h1>Image Search</h1>
+    <AppWrapper className="fluid-container">
+      <h1 className="heading">Search Page</h1>
+      <div className="search">
+        <Bio className="container">
+            <div><strong>Name:</strong> Shivani Kashyap</div>
+            <div><strong>Email:</strong> shivani1999kashyap@gmail.com</div>
+        </Bio>
+        <div className="inputSearch">
       <SearchInput
         type="text"
         placeholder="Search images..."
@@ -98,7 +118,7 @@ const SearchPage = () => {
       <SearchButton onClick={handleSearch} disabled={isLoading}>
         {isLoading ? "Searching..." : "Search"}
       </SearchButton>
-
+      </div>
       <ThumbnailWrapper>
         {searchResults.map((result) => (
           <Thumbnail className="card" style={{ width: "18rem" }} key={result.id}>
@@ -111,6 +131,7 @@ const SearchPage = () => {
           </Thumbnail>
         ))}
       </ThumbnailWrapper>
+      </div>
     </AppWrapper>
   );
 };
