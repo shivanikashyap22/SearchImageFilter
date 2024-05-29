@@ -32,7 +32,6 @@ const SearchPage = () => {
     fetchData();
   }, []);
 
-  
   const handleSearch = async () => {
     setIsLoading(true);
     try {
@@ -46,6 +45,7 @@ const SearchPage = () => {
       }
       const data = await response.json();
       setSearchResults(data.results);
+      setDefaultImages(data.results);
     } catch (error) {
       setError(error.message);
     } finally {
