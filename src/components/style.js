@@ -112,6 +112,9 @@
     color: white;
     font-weight: 500;
     font-size: 15px;
+    .ison{
+        color:white;
+    }
     `;
 
     export const ThumbnailWrapper = styled.div`

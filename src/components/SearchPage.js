@@ -1,27 +1,49 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
 import * as Styled from "./style";
-
+import { IoIosSearch } from "react-icons/io";
 
 const SearchPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [defaultImages, setDefaultImages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const response = await fetch(
+          `https://api.unsplash.com/photos?client_id=iJjP7jKeBwVDVUIvMqjkktv7O3myjYrxFr9AjrceBLE`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch images");
+        }
+        const data = await response.json();
+        setDefaultImages(data);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  
   const handleSearch = async () => {
     setIsLoading(true);
-    setError(null);
     try {
       const response = await fetch(
-        `https://api.unsplash.com/search/photos?client_id=iJjP7jKeBwVDVUIvMqjkktv7O3myjYrxFr9AjrceBLE&query=${encodeURIComponent(searchQuery)}`
+        `https://api.unsplash.com/search/photos?client_id=iJjP7jKeBwVDVUIvMqjkktv7O3myjYrxFr9AjrceBLE&query=${encodeURIComponent(
+          searchQuery
+        )}`
       );
-
       if (!response.ok) {
         throw new Error("Failed to fetch images");
       }
-
       const data = await response.json();
       setSearchResults(data.results);
     } catch (error) {
@@ -51,12 +73,12 @@ const SearchPage = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
           <Styled.SearchButton onClick={handleSearch} disabled={isLoading}>
-            {isLoading ? "Searching..." : "Search"}
+            {isLoading ? "Searching..." : <IoIosSearch  className="icon"/>}
           </Styled.SearchButton>
         </div>
         {error && <div>Error: {error}</div>}
         <Styled.ThumbnailWrapper>
-          {searchResults.map((result) => (
+          {(searchQuery === "" ? defaultImages : searchResults).map((result) => (
             <Styled.Thumbnail className="card" style={{ width: "18rem" }} key={result.id}>
               <div className="card-body">
                 <Styled.ThumbnailImage src={result.urls.thumb} alt={result.alt_description} />
